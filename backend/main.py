@@ -60,6 +60,14 @@ def init_db():
             FOREIGN KEY (user_email) REFERENCES users (email)
         )
     ''')
+    # Insert default test user if not exists
+    cursor.execute("SELECT email FROM users WHERE email = ?", ('test@test.com',))
+    if not cursor.fetchone():
+        cursor.execute(
+            "INSERT INTO users (email, name, phone, password) VALUES (?, ?, ?, ?)",
+            ('test@test.com', 'Test User', '010-0000-0000', '1234')
+        )
+    
     conn.commit()
     conn.close()
 
